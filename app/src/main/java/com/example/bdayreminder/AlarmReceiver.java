@@ -23,7 +23,7 @@ public class AlarmReceiver extends BroadcastReceiver {
         String msg = intent.getStringExtra("Message");
         String Phone = intent.getStringExtra("Phone");
         NotificationCompat.Builder builder = new NotificationCompat.Builder(context,"foxandroid")
-                .setSmallIcon(R.drawable.bday_reminder_app_logo)
+                .setSmallIcon(R.drawable.ic_notification)
                 .setContentTitle(name+"'s Birthday Reminder")
                 .setContentText("Wish "+name+" a very happy birthday!")
                 .setAutoCancel(true)

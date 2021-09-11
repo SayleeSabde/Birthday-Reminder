@@ -114,7 +114,7 @@ public class UpdateActivity extends AppCompatActivity {
                 intent.putExtra("Phone",phone.toString().trim());
                 intent.putExtra("Message",msg.toString().trim());
                 pendingIntent = PendingIntent.getBroadcast(this,InstanceID,intent,PendingIntent.FLAG_UPDATE_CURRENT);
-                alarmManager.setInexactRepeating(AlarmManager.RTC_WAKEUP,calendar.getTimeInMillis(),AlarmManager.INTERVAL_DAY,pendingIntent);
+                alarmManager.setRepeating(AlarmManager.RTC_WAKEUP,calendar.getTimeInMillis(),AlarmManager.INTERVAL_DAY,pendingIntent);
                 Toast.makeText(UpdateActivity.this, "Alarm set successfully ", Toast.LENGTH_SHORT).show();
             }
             else {
