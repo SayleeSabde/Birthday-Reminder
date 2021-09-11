@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.example.bdayreminder">
+
+    <uses-permission android:name="android.permission.SEND_SMS" />
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+
+    <application
+        android:allowBackup="true"
+        android:icon="@drawable/bday_reminder_app_logo"
+        android:label="Birthday Reminder"
+        android:roundIcon="@mipmap/ic_launcher_round"
+        android:supportsRtl="true"
+        android:theme="@style/AppName">
+        <activity
+            android:name=".UpdateActivity"
+            android:exported="true"
+            android:parentActivityName=".MainActivity"/>
+        <activity
+            android:name=".AddActivity"
+            android:exported="true"
+            android:label="Add event"
+            android:parentActivityName=".MainActivity" />
+        <activity
+            android:name=".MainActivity"
+            android:exported="true"
+            android:label="Birthday Reminder">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <receiver android:name=".AlarmReceiver"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.provider.Telephoony.SMS_RECEIVED"></action>
+            </intent-filter>
+        </receiver>
+
+
+    </application>
+
+</manifest>
