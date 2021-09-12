@@ -6,6 +6,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.Manifest;
 import android.app.AlarmManager;
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
@@ -15,6 +16,7 @@ import android.app.PendingIntent;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.os.Build;
 import android.os.Bundle;
@@ -22,6 +24,8 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -36,6 +40,8 @@ public class MainActivity extends AppCompatActivity {
     CustomAdapter customAdapter;
     private AlarmManager alarmManager;
     private PendingIntent pendingIntent;
+    ImageView empty_imageView;
+    TextView no_data;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -43,6 +49,8 @@ public class MainActivity extends AppCompatActivity {
         createNotificationChannel();
         recyclerView=(RecyclerView)findViewById(R.id.recyclerView);
         add_Button=(FloatingActionButton)findViewById(R.id.floatingActionButton);
+        empty_imageView=findViewById(R.id.empty_imageView);
+        no_data=findViewById(R.id.noData);
         add_Button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -57,12 +65,20 @@ public class MainActivity extends AppCompatActivity {
         phone = new ArrayList<>();
         date = new ArrayList<>();
         time = new ArrayList<>();
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
 
-        storeDataInArrays();
+            if (checkSelfPermission(Manifest.permission.SEND_SMS) == PackageManager.PERMISSION_GRANTED) {
+                storeDataInArrays();
 
-        customAdapter = new CustomAdapter(MainActivity.this,this,person_id,name,msg,phone,date,time);
-        recyclerView.setAdapter(customAdapter);
-        recyclerView.setLayoutManager(new LinearLayoutManager(MainActivity.this));
+                customAdapter = new CustomAdapter(MainActivity.this, this, person_id, name, msg, phone, date, time);
+                recyclerView.setAdapter(customAdapter);
+                recyclerView.setLayoutManager(new LinearLayoutManager(MainActivity.this));
+            }
+            else {
+                requestPermissions(new String[]{Manifest.permission.SEND_SMS},1);
+                Toast.makeText(this, "Please grant SMS permission", Toast.LENGTH_SHORT).show();
+            }
+        }
     }
 
     @Override
@@ -90,7 +106,8 @@ public class MainActivity extends AppCompatActivity {
     void storeDataInArrays(){
         Cursor cursor = myDB.readAllData();
         if(cursor.getCount() == 0){
-            Toast.makeText(this, "No data", Toast.LENGTH_SHORT).show();
+            empty_imageView.setVisibility(View.VISIBLE);
+            no_data.setVisibility(View.VISIBLE);
         }
         else{
            while(cursor.moveToNext()){
@@ -101,6 +118,8 @@ public class MainActivity extends AppCompatActivity {
                date.add(cursor.getString(4));
                time.add(cursor.getString(5));
            }
+            empty_imageView.setVisibility(View.GONE);
+            no_data.setVisibility(View.GONE);
         }
     }
     void confirmDialog(){

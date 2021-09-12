@@ -73,7 +73,8 @@ public class AddActivity extends AppCompatActivity {
                     intent.putExtra("Phone",phone.getText().toString().trim());
                     intent.putExtra("Message",msg.getText().toString().trim());
                     pendingIntent = PendingIntent.getBroadcast(this,InstanceID,intent,PendingIntent.FLAG_UPDATE_CURRENT);
-                    alarmManager.setInexactRepeating(AlarmManager.RTC_WAKEUP,calendar.getTimeInMillis(),AlarmManager.INTERVAL_DAY,pendingIntent);
+                   // alarmManager.setRepeating(AlarmManager.RTC_WAKEUP,calendar.getTimeInMillis(),AlarmManager.INTERVAL_DAY,pendingIntent);
+                    alarmManager.setExact(AlarmManager.RTC_WAKEUP,calendar.getTimeInMillis(),pendingIntent);
                     Toast.makeText(AddActivity.this, "Alarm set successfully ", Toast.LENGTH_SHORT).show();
                 }
                 else {
